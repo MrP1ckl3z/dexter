@@ -3,6 +3,7 @@ import { createFinancialSearch, createFinancialMetrics, createReadFilings } from
 import { exaSearch, tavilySearch } from './search/index.js';
 import { skillTool, SKILL_TOOL_DESCRIPTION } from './skill.js';
 import { browserTool } from './browser/index.js';
+import { cryonithTool, CRYONITH_TOOL_DESCRIPTION } from './cryonith.js';
 import { FINANCIAL_SEARCH_DESCRIPTION, FINANCIAL_METRICS_DESCRIPTION, WEB_SEARCH_DESCRIPTION, READ_FILINGS_DESCRIPTION, BROWSER_DESCRIPTION } from './descriptions/index.js';
 import { discoverSkills } from '../skills/index.js';
 
@@ -71,6 +72,16 @@ export function getToolRegistry(model: string): RegisteredTool[] {
       name: 'skill',
       tool: skillTool,
       description: SKILL_TOOL_DESCRIPTION,
+    });
+  }
+
+  // Include Cryonith LLC bridge tool if CRYONITH_MCP_URL is configured.
+  // Read-only by construction (see src/tools/cryonith.ts) — cannot place/approve/skip trades.
+  if (process.env.CRYONITH_MCP_URL) {
+    tools.push({
+      name: 'cryonith_data',
+      tool: cryonithTool,
+      description: CRYONITH_TOOL_DESCRIPTION,
     });
   }
 
